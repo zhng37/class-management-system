@@ -19,7 +19,7 @@ public class ClassManagementApplication {
         
         System.out.println("\n========================================");
         System.out.println("  班级事务管理系统已启动！");
-        System.out.println("  访问地址: http://localhost:8081");
+        System.out.println("  访问地址: http://localhost:8080");
         System.out.println("========================================\n");
     }
 }
