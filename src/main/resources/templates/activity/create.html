@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建活动 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>创建活动</h2>
+            </div>
+            <form th:action="@{/activity/create}" method="post" class="form-container">
+                <div class="form-group">
+                    <label for="title">活动标题 *</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">活动描述 *</label>
+                    <textarea id="description" name="description" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="location">活动地点</label>
+                    <input type="text" id="location" name="location">
+                </div>
+                <div class="form-group">
+                    <label for="startTime">开始时间 * (格式: yyyy-MM-dd HH:mm)</label>
+                    <input type="text" id="startTime" name="startTime" placeholder="2024-01-01 14:00" required>
+                </div>
+                <div class="form-group">
+                    <label for="endTime">结束时间 (格式: yyyy-MM-dd HH:mm)</label>
+                    <input type="text" id="endTime" name="endTime" placeholder="2024-01-01 16:00">
+                </div>
+                <div class="form-group">
+                    <label for="maxParticipants">最大报名人数</label>
+                    <input type="number" id="maxParticipants" name="maxParticipants" min="1">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">创建</button>
+                    <a th:href="@{/activity/list}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

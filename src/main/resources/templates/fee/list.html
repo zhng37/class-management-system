@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班费明细 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>班费管理</h2>
+                <div class="balance-info">
+                    <span class="balance-label">当前余额：</span>
+                    <span class="balance-amount" th:text="${balance}">0.00</span>
+                    <span>元</span>
+                </div>
+                <div class="page-actions" 
+                     th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">
+                    <a th:href="@{/fee/income}" class="btn btn-success">记录收入</a>
+                    <a th:href="@{/fee/expense}" class="btn btn-warning">记录支出</a>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>金额</th>
+                        <th>用户</th>
+                        <th>操作员</th>
+                        <th>说明</th>
+                        <th>时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="fee : ${fees}">
+                        <td>
+                            <span th:class="${fee.type.name() == 'INCOME' ? 'badge badge-success' : 'badge badge-warning'}"
+                                  th:text="${fee.type.description}">类型</span>
+                        </td>
+                        <td th:text="${fee.amount}">金额</td>
+                        <td th:text="${fee.userName}">用户</td>
+                        <td th:text="${fee.operatorName}">操作员</td>
+                        <td th:text="${fee.description}">说明</td>
+                        <td th:text="${#dates.format(fee.transactionTime, 'yyyy-MM-dd HH:mm')}">时间</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(fees)}">
+                        <td colspan="6" class="empty-state">暂无记录</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

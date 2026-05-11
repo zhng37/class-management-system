@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${file.originalName} + ' - 文件详情'">文件详情</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>文件详情</h2>
+                <a th:href="@{/file/list}" class="btn btn-secondary">返回列表</a>
+            </div>
+            <div class="announcement-item" th:if="${file != null}">
+                <div class="form-group">
+                    <label>文件名</label>
+                    <p th:text="${file.originalName}">文件名</p>
+                </div>
+                <div class="form-group">
+                    <label>文件大小</label>
+                    <p th:text="${file.fileSize + ' 字节'}">大小</p>
+                </div>
+                <div class="form-group">
+                    <label>文件类型</label>
+                    <p th:text="${file.fileType != null ? file.fileType : '未知'}">类型</p>
+                </div>
+                <div class="form-group">
+                    <label>上传者</label>
+                    <p th:text="${file.uploaderName}">上传者</p>
+                </div>
+                <div class="form-group">
+                    <label>上传时间</label>
+                    <p th:text="${#dates.format(file.uploadTime, 'yyyy-MM-dd HH:mm')}">时间</p>
+                </div>
+                <div class="form-group">
+                    <label>下载次数</label>
+                    <p th:text="${file.downloadCount}">次数</p>
+                </div>
+                <div class="form-group" th:if="${file.description != null}">
+                    <label>描述</label>
+                    <p th:text="${file.description}">描述</p>
+                </div>
+                <div class="form-group">
+                    <label>文件路径</label>
+                    <p style="word-break: break-all;" th:text="${file.filePath}">路径</p>
+                </div>
+            </div>
+            <div th:if="${file == null}" class="empty-state">
+                <p>文件不存在</p>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+

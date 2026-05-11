@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="header" class="header">
+        <div class="header-content">
+            <h1 class="logo">班级事务管理系统</h1>
+            <div class="user-info" th:if="${session.user != null}">
+                <span th:text="${session.user.realName}">用户名</span>
+                <span class="role" th:text="${session.user.role.description}">角色</span>
+                <a th:href="@{/user/logout}" class="logout-btn">退出</a>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
+
+

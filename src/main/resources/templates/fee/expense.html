@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记录支出 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>记录班费支出</h2>
+            </div>
+            <form th:action="@{/fee/expense}" method="post" class="form-container">
+                <div class="form-group">
+                    <label for="userId">支出用户 *</label>
+                    <select id="userId" name="userId" required>
+                        <option value="0">班级公共支出</option>
+                        <option th:each="user : ${users}" 
+                                th:value="${user.id}" 
+                                th:text="${user.realName + ' (' + user.username + ')' + (user.studentId != null ? ' - ' + user.studentId : '')}">用户</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">金额 *</label>
+                    <input type="number" id="amount" name="amount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">说明</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-warning">提交</button>
+                    <a th:href="@{/fee/list}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

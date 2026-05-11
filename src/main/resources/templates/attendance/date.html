@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按日期查看考勤 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>按日期查看考勤</h2>
+                <a th:href="@{/attendance/record}" class="btn btn-primary">记录考勤</a>
+            </div>
+            <form th:action="@{/attendance/date}" method="get" class="form-container" style="max-width: 400px; margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label for="date">选择日期</label>
+                    <input type="date" id="date" name="date" th:value="${selectedDate}" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+            <table class="data-table" th:if="${attendances != null}">
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>状态</th>
+                        <th>备注</th>
+                        <th>记录时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="attendance : ${attendances}">
+                        <td th:text="${attendance.userName}">姓名</td>
+                        <td>
+                            <span class="badge" 
+                                  th:class="${attendance.status.name() == 'PRESENT' ? 'badge-success' : 
+                                            (attendance.status.name() == 'ABSENT' ? 'badge-danger' : 'badge-warning')}"
+                                  th:text="${attendance.status.description}">状态</span>
+                        </td>
+                        <td th:text="${attendance.remark != null ? attendance.remark : ''}">备注</td>
+                        <td th:text="${#dates.format(attendance.recordTime, 'yyyy-MM-dd HH:mm')}">时间</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(attendances)}">
+                        <td colspan="4" class="empty-state">该日期暂无考勤记录</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+

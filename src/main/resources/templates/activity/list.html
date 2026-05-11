@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动列表 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>活动列表</h2>
+                <a th:href="@{/activity/create}" 
+                   class="btn btn-primary"
+                   th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">创建活动</a>
+            </div>
+            <div class="announcement-list">
+                <div th:each="activity : ${activities}" class="announcement-item">
+                    <div class="announcement-header">
+                        <h3>
+                            <a th:href="@{/activity/detail/{id}(id=${activity.id})}" th:text="${activity.title}">标题</a>
+                            <span class="badge" th:class="${activity.status.name() == 'REGISTERING' ? 'badge-success' : 'badge-warning'}"
+                                  th:text="${activity.status.description}">状态</span>
+                        </h3>
+                        <div class="announcement-meta">
+                            <span th:text="${activity.organizerName}">组织者</span>
+                            <span th:text="${#dates.format(activity.startTime, 'yyyy-MM-dd HH:mm')}">时间</span>
+                            <span th:text="'报名: ' + ${activity.currentParticipants} + (${activity.maxParticipants} != null ? '/' + ${activity.maxParticipants} : '')">人数</span>
+                        </div>
+                    </div>
+                    <div class="announcement-content" th:text="${activity.description}">活动描述</div>
+                </div>
+                <div th:if="${#lists.isEmpty(activities)}" class="empty-state">
+                    <p>暂无活动</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的考勤 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>我的考勤记录</h2>
+                <a th:href="@{/attendance/record}" 
+                   class="btn btn-primary"
+                   th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">记录考勤</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>状态</th>
+                        <th>备注</th>
+                        <th>记录时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="attendance : ${attendances}">
+                        <td th:text="${#dates.format(attendance.attendanceDate, 'yyyy-MM-dd')}">日期</td>
+                        <td>
+                            <span class="badge" 
+                                  th:class="${attendance.status.name() == 'PRESENT' ? 'badge-success' : 
+                                            (attendance.status.name() == 'ABSENT' ? 'badge-danger' : 'badge-warning')}"
+                                  th:text="${attendance.status.description}">状态</span>
+                        </td>
+                        <td th:text="${attendance.remark != null ? attendance.remark : ''}">备注</td>
+                        <td th:text="${#dates.format(attendance.recordTime, 'yyyy-MM-dd HH:mm')}">时间</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(attendances)}">
+                        <td colspan="4" class="empty-state">暂无考勤记录</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

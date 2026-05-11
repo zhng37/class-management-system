@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报名列表 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2 th:text="'报名列表 - ' + ${activity.title}">报名列表</h2>
+                <a th:href="@{/activity/detail/{id}(id=${activity.id})}" class="btn btn-secondary">返回活动</a>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>报名时间</th>
+                        <th>签到状态</th>
+                        <th>签到时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="registration : ${registrations}">
+                        <td th:text="${registration.userName}">姓名</td>
+                        <td th:text="${#dates.format(registration.registrationTime, 'yyyy-MM-dd HH:mm')}">报名时间</td>
+                        <td>
+                            <span class="badge" 
+                                  th:class="${registration.isCheckedIn ? 'badge-success' : 'badge-warning'}"
+                                  th:text="${registration.isCheckedIn ? '已签到' : '未签到'}">状态</span>
+                        </td>
+                        <td th:text="${registration.checkInTime != null ? #dates.format(registration.checkInTime, 'yyyy-MM-dd HH:mm') : ''}">签到时间</td>
+                        <td>
+                            <form th:if="${!registration.isCheckedIn}" 
+                                  th:action="@{/activity/checkin/{activityId}/{userId}(activityId=${activity.id}, userId=${registration.userId})}" 
+                                  method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-primary btn-sm">签到</button>
+                            </form>
+                            <span th:if="${registration.isCheckedIn}" class="badge badge-success">已签到</span>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(registrations)}">
+                        <td colspan="5" class="empty-state">暂无报名记录</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+

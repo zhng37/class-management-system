@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${announcement.title} + ' - 公告详情'">公告详情</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2 th:text="${announcement.title}">公告标题</h2>
+                <a th:href="@{/announcement/list}" class="btn btn-secondary">返回列表</a>
+            </div>
+            <div class="announcement-item">
+                <div class="announcement-meta">
+                    <span>发布者: <strong th:text="${announcement.publisherName}">发布者</strong></span>
+                    <span>发布时间: <strong th:text="${#dates.format(announcement.publishTime, 'yyyy-MM-dd HH:mm')}">时间</strong></span>
+                    <span th:if="${announcement.isImportant}" class="badge badge-important">重要</span>
+                </div>
+                <div class="announcement-content" style="white-space: pre-wrap; margin-top: 1.5rem;" th:text="${announcement.content}">公告内容</div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+

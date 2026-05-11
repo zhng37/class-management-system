@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公告列表 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>公告列表</h2>
+                <a th:href="@{/announcement/publish}" 
+                   class="btn btn-primary"
+                   th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">发布公告</a>
+            </div>
+            <div class="announcement-list">
+                <div th:each="announcement : ${announcements}" class="announcement-item">
+                    <div class="announcement-header">
+                        <h3>
+                            <a th:href="@{/announcement/detail/{id}(id=${announcement.id})}" th:text="${announcement.title}">标题</a>
+                            <span th:if="${announcement.isImportant}" class="badge badge-important">重要</span>
+                        </h3>
+                        <div class="announcement-meta">
+                            <span th:text="${announcement.publisherName}">发布者</span>
+                            <span th:text="${#dates.format(announcement.publishTime, 'yyyy-MM-dd HH:mm')}">时间</span>
+                        </div>
+                    </div>
+                    <div class="announcement-content" th:text="${#strings.abbreviate(announcement.content, 100)}">内容预览</div>
+                    <div class="announcement-actions" 
+                         th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">
+                        <form th:action="@{/announcement/delete/{id}(id=${announcement.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('确定删除吗？')">删除</button>
+                        </form>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(announcements)}" class="empty-state">
+                    <p>暂无公告</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

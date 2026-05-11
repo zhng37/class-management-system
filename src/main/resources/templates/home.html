@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 班级事务管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2>欢迎使用班级事务管理系统</h2>
+            </div>
+            <div class="dashboard">
+                <div class="dashboard-card">
+                    <h3>公告管理</h3>
+                    <p>查看和发布班级公告</p>
+                    <a th:href="@{/announcement/list}" class="btn btn-primary">进入</a>
+                </div>
+                <div class="dashboard-card">
+                    <h3>班费管理</h3>
+                    <p>记录和查看班费收支</p>
+                    <a th:href="@{/fee/list}" class="btn btn-primary">进入</a>
+                </div>
+                <div class="dashboard-card">
+                    <h3>活动管理</h3>
+                    <p>创建和报名班级活动</p>
+                    <a th:href="@{/activity/list}" class="btn btn-primary">进入</a>
+                </div>
+                <div class="dashboard-card">
+                    <h3>考勤管理</h3>
+                    <p>记录和查看考勤信息</p>
+                    <a th:href="@{/attendance/my}" class="btn btn-primary">进入</a>
+                </div>
+                <div class="dashboard-card">
+                    <h3>文件共享</h3>
+                    <p>上传和下载共享文件</p>
+                    <a th:href="@{/file/list}" class="btn btn-primary">进入</a>
+                </div>
+                <div class="dashboard-card" th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">
+                    <h3>用户管理</h3>
+                    <p>管理系统用户</p>
+                    <a th:href="@{/user/manage}" class="btn btn-primary">进入</a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+

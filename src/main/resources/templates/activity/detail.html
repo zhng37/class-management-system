@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${activity.title} + ' - 活动详情'">活动详情</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="container">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <main class="main-content">
+            <div class="page-header">
+                <h2 th:text="${activity.title}">活动标题</h2>
+                <div class="page-actions">
+                    <a th:href="@{/activity/list}" class="btn btn-secondary">返回列表</a>
+                    <a th:href="@{/activity/registrations/{id}(id=${activity.id})}" 
+                       class="btn btn-primary"
+                       th:if="${session.user.role.name() == 'TEACHER' or session.user.role.name() == 'COMMITTEE'}">查看报名</a>
+                </div>
+            </div>
+            <div class="announcement-item">
+                <div class="form-group">
+                    <label>活动描述</label>
+                    <p th:text="${activity.description}">描述</p>
+                </div>
+                <div class="form-group">
+                    <label>活动地点</label>
+                    <p th:text="${activity.location != null ? activity.location : '未设置'}">地点</p>
+                </div>
+                <div class="form-group">
+                    <label>开始时间</label>
+                    <p th:text="${#dates.format(activity.startTime, 'yyyy-MM-dd HH:mm')}">时间</p>
+                </div>
+                <div class="form-group" th:if="${activity.endTime != null}">
+                    <label>结束时间</label>
+                    <p th:text="${#dates.format(activity.endTime, 'yyyy-MM-dd HH:mm')}">时间</p>
+                </div>
+                <div class="form-group">
+                    <label>组织者</label>
+                    <p th:text="${activity.organizerName}">组织者</p>
+                </div>
+                <div class="form-group">
+                    <label>报名人数</label>
+                    <p th:text="${activity.currentParticipants} + (${activity.maxParticipants} != null ? '/' + ${activity.maxParticipants} : '')">人数</p>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <span class="badge" th:class="${activity.status.name() == 'REGISTERING' ? 'badge-success' : 'badge-warning'}"
+                          th:text="${activity.status.description}">状态</span>
+                </div>
+                <div class="form-actions" th:if="${currentUser != null and activity.status.name() == 'REGISTERING'}">
+                    <form th:if="${!isRegistered}" th:action="@{/activity/register/{id}(id=${activity.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-primary">报名</button>
+                    </form>
+                    <form th:if="${isRegistered}" th:action="@{/activity/cancel/{id}(id=${activity.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">取消报名</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
+
+
